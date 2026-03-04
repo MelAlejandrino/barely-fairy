@@ -28,12 +28,12 @@ useSeo()
 
       <!-- Socials -->
       <div class="flex items-center gap-3 mt-6">
-        <a href="https://facebook.com/yourpage" target="_blank"
+        <a href="https://facebook.com/barelyfairy" target="_blank"
            class="flex items-center gap-2 px-4 py-2 rounded-full border border-rose-200 text-rose-400 hover:text-rose-600 hover:bg-rose-100/50 transition-all duration-200 text-xs tracking-wide">
           <Facebook class="w-3.5 h-3.5"/>
           Facebook
         </a>
-        <a href="https://instagram.com/yourhandle" target="_blank"
+        <a href="https://instagram.com/_barelyfairy" target="_blank"
            class="flex items-center gap-2 px-4 py-2 rounded-full border border-rose-200 text-rose-400 hover:text-rose-600 hover:bg-rose-100/50 transition-all duration-200 text-xs tracking-wide">
           <Instagram class="w-3.5 h-3.5"/>
           Instagram
