@@ -46,23 +46,35 @@ function formatLinkedProductPrice(product: Product) {
   return product.price ? `₱${product.price}` : '—'
 }
 
-watch(post, (p) => {
-  if (!p) return
-  useHead({
-    title: `${p.title} — Barely Fairy`,
-    meta: [
-      {name: 'description', content: p.seo?.metaDescription ?? ''},
-      {property: 'og:title', content: p.seo?.metaTitle ?? p.title},
-      {property: 'og:description', content: p.seo?.metaDescription ?? ''},
-      {
-        property: 'og:image', content: p.seo?.ogImage
-          ? builder.image(p.seo.ogImage).width(1200).height(630).url()
-          : 'https://barely-fairy.vercel.app/og-default.jpg'
-      },
-      {property: 'og:type', content: 'article'},
-    ]
-  })
+useHead({
+  title: computed(() =>
+    post.value?.seo?.metaTitle
+      ? `${post.value.seo.metaTitle} — Barely Fairy`
+      : post.value?.title
+        ? `${post.value.title} — Barely Fairy`
+        : 'Barely Fairy'
+  ),
+  meta: [
+    {name: 'description', content: computed(() => post.value?.seo?.metaDescription ?? '')},
+    {
+      property: 'og:title',
+      content: computed(() => post.value?.seo?.metaTitle ?? post.value?.title ?? '')
+    },
+    {
+      property: 'og:description',
+      content: computed(() => post.value?.seo?.metaDescription ?? '')
+    },
+    {
+      property: 'og:image',
+      content: computed(() => post.value?.seo?.ogImage
+        ? builder.image(post.value.seo.ogImage).width(1200).height(630).url()
+        : 'https://barely-fairy.vercel.app/og-default.jpg'
+      )
+    },
+    {property: 'og:type', content: 'product'},
+  ]
 })
+
 
 </script>
 

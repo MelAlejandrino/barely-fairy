@@ -64,23 +64,35 @@ const isInStock = computed(() => {
 
 const components = {}
 
-watchEffect(() => {
-  if (!product.value) return
-  useHead({
-    title: `${product.value.seo?.metaTitle ?? product.value.title} — Barely Fairy`,
-    meta: [
-      {name: 'description', content: product.value.seo?.metaDescription ?? ''},
-      {property: 'og:title', content: product.value.seo?.metaTitle ?? product.value.title},
-      {property: 'og:description', content: product.value.seo?.metaDescription ?? ''},
-      {
-        property: 'og:image', content: product.value.seo?.ogImage
-          ? builder.image(product.value.seo.ogImage).width(1200).height(630).url()
-          : 'https://barely-fairy.vercel.app/og-default.jpg'
-      },
-      {property: 'og:type', content: 'product'},
-    ]
-  })
+useHead({
+  title: computed(() =>
+    product.value?.seo?.metaTitle
+      ? `${product.value.seo.metaTitle} — Barely Fairy`
+      : product.value?.title
+        ? `${product.value.title} — Barely Fairy`
+        : 'Barely Fairy'
+  ),
+  meta: [
+    {name: 'description', content: computed(() => product.value?.seo?.metaDescription ?? '')},
+    {
+      property: 'og:title',
+      content: computed(() => product.value?.seo?.metaTitle ?? product.value?.title ?? '')
+    },
+    {
+      property: 'og:description',
+      content: computed(() => product.value?.seo?.metaDescription ?? '')
+    },
+    {
+      property: 'og:image',
+      content: computed(() => product.value?.seo?.ogImage
+        ? builder.image(product.value.seo.ogImage).width(1200).height(630).url()
+        : 'https://barely-fairy.vercel.app/og-default.jpg'
+      )
+    },
+    {property: 'og:type', content: 'product'},
+  ]
 })
+
 </script>
 
 <template>
