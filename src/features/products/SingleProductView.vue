@@ -6,7 +6,7 @@ import AppLayout from '@/layout/AppLayout.vue'
 import {createImageUrlBuilder} from '@sanity/image-url'
 import {client} from '@/sanity/sanity.ts'
 import type {Image} from '@sanity/types'
-import {ref, computed, watch} from 'vue'
+import {ref, computed, watchEffect} from 'vue'
 import type {ProductVariant} from '@/types/product.ts'
 import {useProduct} from '@/composables/useProduct.ts'
 import {Skeleton} from '@/components/ui/skeleton'
@@ -64,20 +64,20 @@ const isInStock = computed(() => {
 
 const components = {}
 
-watch(product, (p) => {
-  if (!p) return
+watchEffect(() => {
+  if (!product.value) return
   useHead({
-    title: `${p.title} — Barely Fairy`,
+    title: `${product.value.seo?.metaTitle ?? product.value.title} — Barely Fairy`,
     meta: [
-      {name: 'description', content: p.seo?.metaDescription ?? ''},
-      {property: 'og:title', content: p.seo?.metaTitle ?? p.title},
-      {property: 'og:description', content: p.seo?.metaDescription ?? ''},
+      {name: 'description', content: product.value.seo?.metaDescription ?? ''},
+      {property: 'og:title', content: product.value.seo?.metaTitle ?? product.value.title},
+      {property: 'og:description', content: product.value.seo?.metaDescription ?? ''},
       {
-        property: 'og:image', content: p.seo?.ogImage
-          ? builder.image(p.seo.ogImage).width(1200).height(630).url()
+        property: 'og:image', content: product.value.seo?.ogImage
+          ? builder.image(product.value.seo.ogImage).width(1200).height(630).url()
           : 'https://barely-fairy.vercel.app/og-default.jpg'
       },
-      {property: 'og:type', content: 'article'},
+      {property: 'og:type', content: 'product'},
     ]
   })
 })
