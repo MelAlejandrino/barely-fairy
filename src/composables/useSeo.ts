@@ -8,7 +8,7 @@ interface SeoOptions {
 }
 
 const SITE_NAME = 'Barely Fairy'
-const DEFAULT_DESCRIPTION = 'Handmade crochet pieces crafted with care and love 🌸'
+const DEFAULT_DESCRIPTION = 'Discover handmade crochet bags, accessories, and more — all crafted with care and love by Mary. Browse our collection and get in touch!'
 const DEFAULT_OG_IMAGE = 'https://barely-fairy.vercel.app/og-default.jpg'
 
 export function useSeo(options: SeoOptions = {}) {
