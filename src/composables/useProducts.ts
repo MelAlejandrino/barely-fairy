@@ -7,6 +7,7 @@ const PAGE_SIZE = 5
 export function useProducts(filters?: {
   categoryId?: ReturnType<typeof ref<string | null>>
   maxPrice?: ReturnType<typeof ref<number>>
+  search?: ReturnType<typeof ref<string>>
 }) {
   const products = ref<Product[]>([])
   const loading = ref(true)
@@ -27,12 +28,16 @@ export function useProducts(filters?: {
 
       const priceFilter = filters?.maxPrice?.value && filters.maxPrice.value < 1000
         ? `&& (
-      (!hasVariants && price <= ${filters.maxPrice.value}) ||
-      (hasVariants && count(variants[price <= ${filters.maxPrice.value}]) > 0)
-    )`
+            (!hasVariants && price <= ${filters.maxPrice.value}) ||
+            (hasVariants && count(variants[price <= ${filters.maxPrice.value}]) > 0)
+          )`
         : ''
 
-      const baseQuery = `*[_type == "product" ${categoryFilter} ${priceFilter}]`
+      const searchFilter = filters?.search?.value
+        ? `&& title match "*${filters.search.value}*"`
+        : ''
+
+      const baseQuery = `*[_type == "product" ${categoryFilter} ${priceFilter} ${searchFilter}]`
 
       const [result, count] = await Promise.all([
         client.fetch<Product[]>(`
@@ -61,9 +66,12 @@ export function useProducts(filters?: {
     fetchProducts()
   }
 
-  // Refetch when filters change
   watch(
-    [() => filters?.categoryId?.value, () => filters?.maxPrice?.value],
+    [
+      () => filters?.categoryId?.value,
+      () => filters?.maxPrice?.value,
+      () => filters?.search?.value,  // 👈 watches debounced search
+    ],
     () => {
       currentPage.value = 1
       fetchProducts()
